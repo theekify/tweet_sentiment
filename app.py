@@ -21,5 +21,17 @@ if st.button("Predict"):
         vector = vectorizer.transform([tweet.lower()])
         pred = model.predict(vector)[0]
 
-        mapping = {0: "Negative", 1: "Neutral", 2: "Positive"}
-        st.success(f"Prediction: {mapping[pred]}")
+        # Handle both string and numeric predictions
+        if isinstance(pred, str):
+            sentiment = pred.capitalize()
+        else:
+            mapping = {0: "Negative", 1: "Neutral", 2: "Positive"}
+            sentiment = mapping.get(pred, "Unknown")
+        
+        # Display with appropriate styling
+        if sentiment == "Positive":
+            st.success(f"Prediction: {sentiment}")
+        elif sentiment == "Negative":
+            st.error(f"Prediction: {sentiment}")
+        else:
+            st.info(f"Prediction: {sentiment}")
